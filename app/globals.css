@@ -1,0 +1,273 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 20% 98%;
+  --foreground: 220 23% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 23% 12%;
+  --primary: 166 70% 28%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 210 18% 92%;
+  --muted-foreground: 220 10% 42%;
+  --border: 214 18% 84%;
+  --input: 214 18% 84%;
+  --ring: 166 70% 28%;
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.a4-page {
+  aspect-ratio: 210 / 297;
+  width: min(100%, 210mm);
+}
+
+.resume-preview-compact .a4-page,
+.resume-preview-workbench .a4-page {
+  aspect-ratio: auto;
+  width: 210mm;
+  max-width: none;
+}
+
+.resume-paged-preview {
+  position: relative;
+  margin-inline: auto;
+  display: flex;
+  width: 210mm;
+  max-width: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resume-page-measure {
+  position: absolute;
+  left: -10000px;
+  top: 0;
+  width: 210mm;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.resume-page-clip {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+}
+
+.resume-page-offset {
+  width: 210mm;
+}
+
+.resume-page-measure .resume-print-page,
+.resume-page-clip .resume-print-page {
+  margin: 0;
+  box-shadow: none;
+}
+
+.resume-print-page {
+  font-size: var(--resume-body-font-size, 11pt);
+  font-family: var(--resume-font-family, inherit) !important;
+  color: var(--resume-body-color, #000000);
+}
+
+.resume-preview-workbench .resume-print-page,
+.resume-print-surface .resume-print-page {
+  height: auto;
+  min-height: 297mm;
+  overflow: visible;
+}
+
+.resume-print-page,
+.resume-print-page * {
+  font-family: var(--resume-font-family, inherit) !important;
+}
+
+.resume-print-page p,
+.resume-print-page li,
+.resume-print-page div,
+.resume-print-page span,
+.resume-print-page .resume-body-text {
+  font-size: var(--resume-body-font-size, 11pt) !important;
+  line-height: var(--resume-line-height, 18pt) !important;
+}
+
+.resume-print-page p,
+.resume-print-page li {
+  color: var(--resume-body-color, #000000) !important;
+}
+
+.resume-print-page h2,
+.resume-print-page h3,
+.resume-print-page .resume-heading-text {
+  font-size: var(--resume-heading-font-size, 11pt) !important;
+  font-weight: var(--resume-heading-weight, 700) !important;
+}
+
+.resume-print-page .resume-meta-text {
+  font-size: var(--resume-meta-font-size, calc(var(--resume-body-font-size, 11pt) * 0.92)) !important;
+  line-height: var(--resume-line-height, 18pt) !important;
+}
+
+.resume-print-page .resume-name-text {
+  font-size: var(--resume-name-font-size, calc(var(--resume-heading-font-size, 12pt) * 2.4)) !important;
+}
+
+.resume-print-page b,
+.resume-print-page strong {
+  font-weight: 700 !important;
+}
+
+.resume-print-page em,
+.resume-print-page i {
+  font-style: italic !important;
+}
+
+.resume-print-page span[data-resume-font-size="9"] {
+  font-size: 9pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="10"] {
+  font-size: 10pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="11"] {
+  font-size: 11pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="12"] {
+  font-size: 12pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="13"] {
+  font-size: 13pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="14"] {
+  font-size: 14pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="15"] {
+  font-size: 15pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="16"] {
+  font-size: 16pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="18"] {
+  font-size: 18pt !important;
+}
+
+.resume-print-page span[data-resume-font-size="20"] {
+  font-size: 20pt !important;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: white;
+    height: auto;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .resume-print-surface,
+  .resume-print-surface *,
+  .resume-print-page,
+  .resume-print-page * {
+    visibility: visible !important;
+  }
+
+  .resume-print-surface {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: white !important;
+  }
+
+  .resume-placeholder-badge {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .resume-print-page {
+    position: static !important;
+    box-shadow: none !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: none !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .resume-paged-preview {
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+
+  .resume-page-measure {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .resume-page-clip {
+    position: relative !important;
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    break-after: page;
+    page-break-after: always;
+    box-shadow: none !important;
+  }
+
+  .resume-page-clip:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .resume-page-offset {
+    width: 210mm !important;
+  }
+
+  .resume-page-clip .resume-print-page {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+}
