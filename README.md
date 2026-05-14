@@ -180,3 +180,11 @@ public/
 ```text
 https://github.com/ly-hdy/AI-Resume-Builder
 ```
+
+## 从 0 到上线教程
+
+如果你想了解这个项目从本地开发到 GitHub、Vercel 上线的完整过程，可以阅读：
+
+```text
+TUTORIAL.md
+```
