@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Clock3,
-  Database,
+  BriefcaseBusiness,
   FileSearch,
-  FileText,
-  Layers3,
+  Library,
+  PenLine,
   Plus,
   Sparkles
 } from "lucide-react";
@@ -28,159 +27,99 @@ export default function DashboardPage() {
     setJds(readStoredJds());
   }, []);
 
-  const baseResumes = useMemo(() => resumes.filter((resume) => !resume.baseResumeId), [resumes]);
-  const targetedResumes = useMemo(() => resumes.filter((resume) => resume.baseResumeId), [resumes]);
-  const recentBaseResume = baseResumes[0] ?? resumes[0] ?? normalizeResume(demoResume);
-  const recentJd = jds[0];
-  const recentTargetedResume = targetedResumes[0];
-  const primaryResumeId = recentBaseResume.id ?? demoResume.id;
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">工作台</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            维护一份基础简历，围绕不同岗位生成可投递的定制版本。
-          </p>
-        </div>
-        <Link
-          href="/resumes/new"
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          新建基础简历
-        </Link>
+      <div>
+        <h1 className="text-2xl font-semibold">工作台</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          先创建或生成简历，再保存目标岗位，最后用 AI 做匹配分析和优化建议。
+        </p>
       </div>
 
-      <section className="mt-8">
-        <SectionTitle icon={<Clock3 className="h-5 w-5 text-primary" aria-hidden="true" />} title="最近使用" />
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
-          <RecentCard
-            title="最近编辑的简历"
-            label={resumeDisplayName(recentBaseResume)}
-            description={recentBaseResume.basics.title || "先把完整经历沉淀成基础简历"}
-            href={`/resumes/${recentBaseResume.id}/edit`}
-            cta="继续编辑"
-          />
-          <RecentCard
-            title="最近解析的 JD"
-            label={recentJd ? jdDisplayName(recentJd) : "还没有岗位 JD"}
-            description={
-              recentJd
-                ? [recentJd.company, recentJd.location, recentJd.salary].filter(Boolean).join(" | ") || "已保存岗位信息"
-                : "粘贴招聘信息后，系统会提取职责、要求和关键词"
-            }
-            href={recentJd ? `/resumes/${recentJd.resumeId}/jd` : `/resumes/${primaryResumeId}/jd`}
-            cta={recentJd ? "查看 JD" : "新建 JD"}
-          />
-          <RecentCard
-            title="最近生成的定制版本"
-            label={recentTargetedResume ? resumeDisplayName(recentTargetedResume) : "还没有岗位版本"}
-            description={
-              recentTargetedResume
-                ? recentTargetedResume.basics.title || "面向具体岗位的简历版本"
-                : "基于基础简历和 JD 生成不同投递版本"
-            }
-            href={recentTargetedResume ? `/resumes/${recentTargetedResume.id}/edit` : `/resumes/${primaryResumeId}/ai-review`}
-            cta={recentTargetedResume ? "编辑版本" : "去匹配分析"}
-          />
-        </div>
-      </section>
+      <DashboardSection
+        title="我的简历"
+        description="支持传统方式创建，也可以让 AI 根据你的信息生成一份简历初稿。"
+      >
+        <DashboardCard
+          icon={<Plus className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="新建通用简历"
+          description="通过手动填写、上传解析或选择模板，创建一份可直接使用的完整简历。"
+          href="/resumes/new"
+          cta="开始创建"
+        />
+        <DashboardCard
+          icon={<Sparkles className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="AI 智能简历生成"
+          description="填写身份、目标岗位和经历素材，AI 帮你生成简历初稿，并可辅助改写经历。"
+          href="/resumes/ai-generate"
+          cta="AI 帮我写"
+        />
+        <DashboardCard
+          icon={<Library className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="我的简历"
+          description={`集中查看所有已保存简历，包括通用简历、AI 生成简历和定制版本。当前 ${resumes.length} 份。`}
+          href="/resumes"
+          cta="查看简历"
+        />
+      </DashboardSection>
 
-      <section className="mt-8">
-        <SectionTitle icon={<Sparkles className="h-5 w-5 text-primary" aria-hidden="true" />} title="快捷操作" />
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <ActionCard
-            icon={<FileText className="h-5 w-5 text-primary" aria-hidden="true" />}
-            title="新建基础简历"
-            description="手动填写、上传解析或从模板开始，先建立完整经历库。"
-            href="/resumes/new"
-            cta="开始创建"
-          />
-          <ActionCard
-            icon={<FileSearch className="h-5 w-5 text-primary" aria-hidden="true" />}
-            title="新建 JD"
-            description="粘贴岗位信息，自动提取职责、任职要求和关键词。"
-            href={`/resumes/${primaryResumeId}/jd`}
-            cta="解析岗位"
-          />
-          <ActionCard
-            icon={<Layers3 className="h-5 w-5 text-primary" aria-hidden="true" />}
-            title="生成岗位版本"
-            description="把基础简历和目标 JD 放在一起，生成可确认的优化建议。"
-            href={`/resumes/${primaryResumeId}/ai-review`}
-            cta="进入匹配"
-          />
-        </div>
-      </section>
+      <DashboardSection
+        title="我的岗位"
+        description="保存目标岗位 JD，作为后续匹配分析和简历优化的输入。"
+      >
+        <DashboardCard
+          icon={<FileSearch className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="新建岗位 JD"
+          description="粘贴招聘信息，或上传文件/截图，系统会提取职位、公司、职责、要求和关键词。"
+          href={`/resumes/${resumes[0]?.id ?? demoResume.id}/jd`}
+          cta="解析岗位"
+        />
+        <DashboardCard
+          icon={<BriefcaseBusiness className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="我的岗位 JD"
+          description={`查看已保存的岗位信息，并进入编辑或匹配分析。当前 ${jds.length} 个岗位。`}
+          href="/jds"
+          cta="查看岗位"
+        />
+      </DashboardSection>
 
-      <section className="mt-8">
-        <SectionTitle icon={<Database className="h-5 w-5 text-primary" aria-hidden="true" />} title="我的资产" />
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <AssetCard
-            title="基础简历"
-            count={baseResumes.length}
-            description="用于沉淀完整经历和通用信息。"
-            href="/resumes"
-          />
-          <AssetCard
-            title="我的岗位"
-            count={jds.length}
-            description="已解析和保存的 JD 信息。"
-            href="/jds"
-          />
-          <AssetCard
-            title="定制版本简历"
-            count={targetedResumes.length}
-            description="面向具体岗位的投递版本。"
-            href="/resumes"
-          />
-        </div>
-      </section>
+      <DashboardSection
+        title="AI 匹配分析"
+        description="当你已经有简历和岗位后，可以直接选择一份简历和一个岗位进行匹配。"
+      >
+        <DashboardCard
+          icon={<PenLine className="h-5 w-5 text-primary" aria-hidden="true" />}
+          title="开始匹配分析"
+          description="选择简历和岗位 JD，生成匹配度、关键词覆盖、优势差距和可确认的优化建议。"
+          href="/ai-match"
+          cta="选择并分析"
+        />
+      </DashboardSection>
     </div>
   );
 }
 
-function SectionTitle({ icon, title }: { icon: ReactNode; title: string }) {
-  return (
-    <div className="flex items-center gap-2">
-      {icon}
-      <h2 className="text-xl font-semibold">{title}</h2>
-    </div>
-  );
-}
-
-function RecentCard({
+function DashboardSection({
   title,
-  label,
   description,
-  href,
-  cta
+  children
 }: {
   title: string;
-  label: string;
   description: string;
-  href: string;
-  cta: string;
+  children: ReactNode;
 }) {
   return (
-    <article className="rounded-lg border bg-card p-5">
-      <p className="text-sm text-muted-foreground">{title}</p>
-      <h3 className="mt-3 text-base font-semibold">{label}</h3>
-      <p className="mt-2 min-h-10 text-sm leading-6 text-muted-foreground">{description}</p>
-      <Link
-        href={href}
-        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-      >
-        {cta}
-        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-      </Link>
-    </article>
+    <section className="mt-8">
+      <div>
+        <h2 className="text-xl font-semibold">{title}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+      </div>
+      <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{children}</div>
+    </section>
   );
 }
 
-function ActionCard({
+function DashboardCard({
   icon,
   title,
   description,
@@ -202,33 +141,12 @@ function ActionCard({
       <p className="mt-3 min-h-12 text-sm leading-6 text-muted-foreground">{description}</p>
       <Link
         href={href}
-        className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
       >
         {cta}
+        <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
     </article>
-  );
-}
-
-function AssetCard({
-  title,
-  count,
-  description,
-  href
-}: {
-  title: string;
-  count: number;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link href={href} className="rounded-lg border bg-card p-5 transition-colors hover:bg-muted/40">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="text-base font-semibold">{title}</h3>
-        <span className="text-2xl font-semibold">{count}</span>
-      </div>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
-    </Link>
   );
 }
 
@@ -245,12 +163,4 @@ function readStoredResumes() {
   } catch {
     return [normalizeResume(demoResume)];
   }
-}
-
-function resumeDisplayName(resume: ResumeData) {
-  return resume.name || resume.basics.name || "未命名简历";
-}
-
-function jdDisplayName(jd: JobDescriptionData) {
-  return jd.jobTitle || jd.company || "未命名岗位";
 }
