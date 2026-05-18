@@ -35,13 +35,13 @@ export default function JobDescriptionsPage() {
 
   return (
     <PageShell
-      title="岗位 JD 解析"
-      description="集中查看已经保存的岗位描述解析结果，并进入编辑或 AI 匹配分析。"
+      title="我的岗位"
+      description="保存和管理目标岗位 JD。岗位信息会作为 AI 匹配和定制简历的输入。"
       actions={
         <Button asChild>
           <Link href={`/resumes/${primaryResumeId}/jd`}>
             <FileSearch className="h-4 w-4" aria-hidden="true" />
-            新建 JD 解析
+            新建 JD
           </Link>
         </Button>
       }
@@ -59,10 +59,7 @@ export default function JobDescriptionsPage() {
                 </div>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <Link
-                      href={`/resumes/${jd.resumeId}/jd`}
-                      className="font-medium hover:text-primary"
-                    >
+                    <Link href={`/resumes/${jd.resumeId}/jd`} className="font-medium hover:text-primary">
                       {jd.jobTitle || "未命名岗位"}
                     </Link>
                     <Badge>{jd.parsedConfidence}% 置信度</Badge>
@@ -94,12 +91,40 @@ export default function JobDescriptionsPage() {
             </div>
           ))
         ) : (
-          <div className="p-6 text-sm text-muted-foreground">
-            暂无保存的 JD。点击“新建 JD 解析”录入岗位描述。
-          </div>
+          <EmptyJdState resumeId={primaryResumeId} />
         )}
       </section>
     </PageShell>
+  );
+}
+
+function EmptyJdState({ resumeId }: { resumeId: string }) {
+  return (
+    <div className="p-8">
+      <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-md bg-muted">
+          <BriefcaseBusiness className="h-6 w-6 text-primary" aria-hidden="true" />
+        </div>
+        <h2 className="mt-5 text-lg font-semibold">还没有岗位 JD</h2>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          你可以粘贴招聘信息，系统会自动提取岗位名称、公司、地点、薪资、岗位职责、任职要求和关键词。
+        </p>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          解析后，可以将岗位与基础简历匹配，生成面向该岗位的定制简历建议。
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <Button asChild>
+            <Link href={`/resumes/${resumeId}/jd`}>
+              <FileSearch className="h-4 w-4" aria-hidden="true" />
+              粘贴或上传 JD
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/resumes">先选择基础简历</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
