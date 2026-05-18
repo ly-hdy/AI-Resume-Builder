@@ -1,28 +1,82 @@
 # AI Resume Builder
 
-AI Resume Builder 是一个基于 Next.js 的中文简历生成与优化工具。它支持简历结构化编辑、模板预览、PDF 导出、JD 解析、AI 匹配分析和简历内容润色，适合用于求职简历制作、岗位匹配和简历版本管理。
+AI Resume Builder 是一个面向中文求职场景的 AI 简历工具。它支持通用简历创建、AI 智能简历生成、岗位 JD 解析、简历与岗位匹配分析，以及 A4 简历预览和 PDF 导出。
 
-## 功能概览
+当前产品心智：
 
-- 简历工作台：`/dashboard`
-- 简历列表：`/resumes`
-- 新建或上传简历：`/resumes/new`
-- 简历编辑器：`/resumes/[resumeId]/edit`
-- A4 简历预览与浏览器打印导出 PDF：`/resumes/[resumeId]/preview`
-- 简历版本管理：`/resumes/[resumeId]/versions`
-- JD 输入、上传与解析：`/resumes/[resumeId]/jd`
-- AI 匹配分析与优化建议：`/resumes/[resumeId]/ai-review`
-- API 健康检查：`/api/health`
+```text
+创建/生成简历 -> 保存岗位 JD -> AI 匹配分析 -> 编辑确认 -> 预览导出
+```
 
-## 核心能力
+## 核心功能
 
-- 本地保存简历草稿，数据存储在浏览器 `localStorage`。
-- 支持手动创建简历，也支持上传 JSON / TXT / MD / PDF / Word 文件生成草稿。
-- 支持 JD 文本粘贴、示例填充、TXT / MD / JSON 文件读取。
-- 支持 JD 截图 OCR，文件类型包括 PNG / JPG / JPEG / WEBP / BMP。
-- 支持多种中文简历模板，包括正式学术模板、实习生模板、应届生模板、社招模板、经典单栏、紧凑单栏、侧栏模板等。
-- 支持字体、字号、行距、页边距、照片位置、正文位置、标题粗细、正文颜色、标题颜色等排版设置。
-- 支持 DeepSeek API 驱动的简历解析、JD 解析、匹配分析和经历润色。
+### 工作台
+
+工作台分为三个部分：
+
+- 我的简历：新建通用简历、AI 智能简历生成、查看我的简历。
+- 我的岗位：新建岗位 JD、查看已保存岗位 JD。
+- AI 匹配分析：选择一份简历和一个岗位 JD，生成匹配分析和优化建议。
+
+### 简历创建
+
+- 手动创建简历。
+- 上传 JSON / TXT / MD / PDF / Word 文件解析为草稿。
+- 从模板开始创建简历。
+- 使用示例简历。
+
+### AI 智能简历生成
+
+- 以对话式分步流程收集信息。
+- 支持学生 / 职场人身份。
+- 目标岗位可选，不填写也可以生成通用简历。
+- 支持教育背景、工作经历、实习经历、项目经历、校园经历、其他经历、技能、证书、奖项。
+- 每个经历模块都支持“AI 帮写”。
+- 右侧固定展示模板预览，填写过程中实时更新。
+- 可直接保存，也可保存后进入编辑器继续精修。
+
+### 我的简历
+
+- 展示所有已保存简历。
+- 支持编辑、重命名、删除。
+- 不再区分通用简历和定制简历，列表更像用户自己的简历文件夹。
+
+### 岗位 JD
+
+- 支持粘贴岗位描述。
+- 支持上传 TXT / MD / JSON 文件。
+- 支持上传 JD 截图并进行 OCR。
+- AI 提取岗位名称、公司、地点、薪资、岗位职责、任职要求、加分项、关键词和岗位解读。
+
+### AI 匹配分析
+
+- 用户选择一份简历和一个岗位 JD。
+- 生成整体匹配度、关键词覆盖、优势、差距和优化建议。
+- 用户可以接受或拒绝 AI 建议。
+- 接受建议后写入简历字段，用户仍保留最终编辑权。
+
+### 预览与导出
+
+- A4 简历预览。
+- 多模板展示。
+- 字体、字号、行距、页边距、颜色、照片等排版设置。
+- 通过浏览器打印另存为 PDF。
+
+## 页面入口
+
+| 页面 | 路由 | 说明 |
+| --- | --- | --- |
+| 首页 | `/` | 产品介绍和入口 |
+| 工作台 | `/dashboard` | 我的简历、我的岗位、AI 匹配分析 |
+| 新建简历 | `/resumes/new` | 手动、上传、模板、示例 |
+| AI 智能生成 | `/resumes/ai-generate` | 对话式生成简历草稿 |
+| 我的简历 | `/resumes` | 所有已保存简历 |
+| 简历编辑器 | `/resumes/[resumeId]/edit` | 结构化编辑和实时预览 |
+| 简历预览 | `/resumes/[resumeId]/preview` | A4 预览和 PDF 导出 |
+| 我的岗位 | `/jds` | 已保存 JD 列表 |
+| JD 解析 | `/resumes/[resumeId]/jd` | 粘贴/上传 JD，OCR 与 AI 解析 |
+| AI 匹配分析 | `/ai-match` | 选择简历和岗位后进入匹配 |
+| AI 分析结果 | `/resumes/[resumeId]/ai-review` | 匹配度、差距和优化建议 |
 
 ## 技术栈
 
@@ -30,31 +84,38 @@ AI Resume Builder 是一个基于 Next.js 的中文简历生成与优化工具�
 - React 18
 - TypeScript
 - Tailwind CSS
+- lucide-react
 - Tesseract.js
 - Mammoth
 - PDF.js
 - DeepSeek API
 
-## 环境要求
+## 本地运行
+
+环境要求：
 
 - Node.js 18.18 或更高版本
 - npm
 
-## 本地运行
+安装依赖：
 
 ```bash
-cd "D:\桌面\code\创新\profile web"
 npm install
+```
+
+启动开发服务器：
+
+```bash
 npm run dev
 ```
 
-默认访问：
+访问：
 
 ```text
 http://localhost:3000
 ```
 
-如果 3000 端口被占用，可以指定端口：
+如果 3000 端口被占用：
 
 ```bash
 npm run dev -- -p 3001
@@ -68,7 +129,7 @@ npm run dev -- -p 3001
 copy .env.example .env.local
 ```
 
-本项目主要使用以下环境变量：
+配置：
 
 ```text
 DEEPSEEK_API_KEY=你的 DeepSeek API Key
@@ -78,113 +139,60 @@ DATABASE_URL=
 
 说明：
 
-- `DEEPSEEK_API_KEY`：必填，用于 AI 简历解析、JD 解析、匹配分析和内容润色。
+- `DEEPSEEK_API_KEY`：用于简历解析、JD 解析、匹配分析和内容润色。
 - `DEEPSEEK_MODEL`：可选，默认使用 `deepseek-v4-flash`。
-- `DATABASE_URL`：当前项目暂未实际使用，可以先留空。
+- `DATABASE_URL`：当前版本暂未实际使用。
 
-不要提交 `.env.local`，该文件已经在 `.gitignore` 中忽略。
+不要提交 `.env.local`。
 
-## 常用脚本
+## 常用命令
 
 ```bash
 npm run dev
+npm run lint
 npm run build
 npm run start
-npm run lint
 ```
 
-## 部署到 Vercel
+## 数据存储
 
-1. 将项目推送到 GitHub。
-2. 登录 Vercel。
-3. 新建项目并导入 GitHub 仓库。
-4. Framework Preset 选择 `Next.js`。
-5. Install Command 使用默认值：
+当前版本主要使用浏览器 `localStorage`：
 
-```text
-npm install
-```
+- 简历草稿保存在本地浏览器。
+- JD 解析结果保存在本地浏览器。
+- 上传文件不会被永久保存到云端。
 
-6. Build Command 使用默认值：
+限制：
 
-```text
-npm run build
-```
+- 不同浏览器、不同设备之间不会自动同步。
+- 清除浏览器数据后，本地草稿会丢失。
 
-7. 在 Vercel 项目的环境变量中添加：
+## 部署
+
+推荐部署到 Vercel。
+
+流程：
+
+1. 将代码推送到 GitHub。
+2. 在 Vercel 中导入 GitHub 仓库。
+3. Framework Preset 选择 `Next.js`。
+4. 配置环境变量：
 
 ```text
 DEEPSEEK_API_KEY
 DEEPSEEK_MODEL
 ```
 
-8. 保存环境变量后重新部署。
-
-部署成功后，Vercel 会生成一个 `*.vercel.app` 域名，其他人可以通过该网址访问网站。
-
-## 部署注意事项
-
-- 线上网站和本地网站的 `localStorage` 不互通，部署后不会自动带上本地浏览器里保存的简历草稿。
-- 如果 AI 功能提示 API Key 未配置，请检查 Vercel 的 `Environment Variables` 是否填写正确，并在保存后重新部署。
-- GitHub Pages 不适合直接部署完整项目，因为本项目使用了 Next.js API Routes。推荐使用 Vercel。
-
-## 项目结构
-
-```text
-app/
-  api/                  # AI 与健康检查 API
-  dashboard/            # 工作台
-  jds/                  # JD 管理入口
-  resumes/              # 简历列表、新建、编辑、预览、版本、JD、AI 分析
-components/
-  layout/               # 页面布局组件
-  resume-editor/        # 简历编辑器与预览核心
-  ui/                   # 基础 UI 组件
-lib/
-  jd-data.ts            # JD 数据结构与本地存储
-  resume-data.ts        # 简历默认数据、归一化、本地存储 key
-  resume-file-parser.ts # 简历文件解析
-  resume-templates.ts   # 模板目录
-types/
-  ai.ts
-  jd.ts
-  resume.ts
-public/
-  pdfjs/                # PDF.js 浏览器资源
-```
-
-## 数据存储
-
-当前版本主要使用浏览器本地存储：
-
-- 简历草稿：`localStorage`
-- JD 解析结果：`localStorage`
-- 上传文件不会自动上传到云端数据库
-
-这意味着不同浏览器、不同设备之间的数据不会自动同步。
+5. 部署完成后，Vercel 会生成线上地址。
 
 ## 验收建议
 
-本地或线上部署后，可以按以下步骤检查主要功能：
+上线后建议检查：
 
-1. 打开 `/resumes/new`，新建一份简历。
-2. 进入编辑器，填写基本信息、教育经历、项目经历等。
-3. 调整字体、字号、行距、页边距、正文位置、正文颜色和标题颜色。
-4. 打开预览页，检查 A4 页面效果。
-5. 使用浏览器打印功能另存为 PDF。
-6. 打开 JD 页面，粘贴或上传 JD 文本。
-7. 保存 JD 后进入 AI 匹配分析页面，检查分析结果。
-
-## GitHub 仓库
-
-```text
-https://github.com/ly-hdy/AI-Resume-Builder
-```
-
-## 从 0 到上线教程
-
-如果你想了解这个项目从本地开发到 GitHub、Vercel 上线的完整过程，可以阅读：
-
-```text
-TUTORIAL.md
-```
+1. 打开 `/dashboard`，确认工作台三块入口正常。
+2. 打开 `/resumes/new`，测试手动创建和上传解析。
+3. 打开 `/resumes/ai-generate`，测试对话式 AI 生成和模板预览。
+4. 打开 `/resumes`，测试编辑、重命名、删除。
+5. 打开 `/jds` 和 `/resumes/[resumeId]/jd`，测试 JD 解析。
+6. 打开 `/ai-match`，选择简历和岗位进行匹配分析。
+7. 打开预览页，使用浏览器导出 PDF。
